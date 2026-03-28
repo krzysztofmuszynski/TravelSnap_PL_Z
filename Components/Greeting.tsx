@@ -1,6 +1,12 @@
 import {View, Text, StyleSheet} from 'react-native';
 
-export default function Greeting({name, year}: { name: string, year: string}) {
+interface GreetingProps {
+    name: string;
+    age: number;
+    hobby?: string;
+}
+
+export default function Greeting({name, age, hobby} : GreetingProps) {
     // const name = 'Student';
     // const year = 2024;
 
@@ -10,8 +16,9 @@ export default function Greeting({name, year}: { name: string, year: string}) {
                 Cześć, {name}!
             </Text>
             <Text style={styles.subtitle}>
-                Rok: {year}
+                Twój wiek: {age}
             </Text>
+            {hobby && <Text>Hobby: {hobby}</Text>}
         </View>
     );
 
