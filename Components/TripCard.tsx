@@ -1,19 +1,36 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Image, Pressable, Alert} from 'react-native';
+import Star from "@/Components/Star";
 
 interface TripCardProps {
     title: string;
     destination: string;
     date: string;
     rating: number;
+    imageURI?: string;
 }
 
-export default function TripCard({title, destination, date, rating} : TripCardProps) {
+export default function TripCard({title, destination, date, rating, imageURI} : TripCardProps) {
+
     return (
         <View style={styles.card}>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.destination}>{destination}</Text>
-            <Text style={styles.date}>{date}</Text>
-            <Text style={styles.rating}>{rating}</Text>
+            <Pressable onPress={() => {Alert.alert("Wykup wycieczke")}}>
+                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.destination}>{destination}</Text>
+                <Text style={styles.date}>{date}</Text>
+                {imageURI && (
+                    <Image
+                        style={{width: 100, height: 100, borderRadius: 5, marginTop: 8}}
+                        source={{
+                            uri: imageURI
+                        }}
+                    />
+                )}
+                <Text style={styles.rating}>
+                    {Array.from({length: rating}).map((el, index) => (
+                        <Star key={index} />
+                    ))}
+                </Text>
+            </Pressable>
         </View>
     )
 }
