@@ -4,7 +4,7 @@ import Greeting from "@/Components/Greeting";
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
-        <Greeting/>
+        <Greeting name="Krzysztof" year="2026"/>
       {/*<Text style={styles.title}>TravelSnap</Text>*/}
       {/*<Text style={styles.subtitle}>Twój dziennik podróży</Text>*/}
       {/*<Text style={styles.author}>Kajetan Kisielewski</Text>*/}
