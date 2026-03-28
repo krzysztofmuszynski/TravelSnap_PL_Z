@@ -1,16 +1,16 @@
 import {View, Text, StyleSheet} from 'react-native';
 
-export default function Greeting(props) {
-    const name = 'Student';
-    const year = 2024;
+export default function Greeting({name, year}: { name: string, year: string}) {
+    // const name = 'Student';
+    // const year = 2024;
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>
-                Cześć, {props.name}!
+                Cześć, {name}!
             </Text>
             <Text style={styles.subtitle}>
-                Rok: {props.year}
+                Rok: {year}
             </Text>
         </View>
     );
