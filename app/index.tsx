@@ -35,6 +35,10 @@ export default function HomeScreen() {
         setRating('');
     }
 
+    const handleUsun = (id: string) => {
+        setTrips(trips.filter(trip => trip.id !== id));
+    }
+
     return (
       <ScrollView style={styles.container}>
           <TextInput
@@ -69,6 +73,12 @@ export default function HomeScreen() {
               >
             <Text style={styles.addText}>+ Dodaj podróż</Text>
           </Pressable>
+
+          <View>
+              {trips.map(trip => (
+                  <TripCard key={trip.id} title={trip.title} destination={trip.destination} date={trip.date} rating={trip.rating} onUsun={() => handleUsun(trip.id)} />
+              ))}
+          </View>
       </ScrollView>
     );
 }
