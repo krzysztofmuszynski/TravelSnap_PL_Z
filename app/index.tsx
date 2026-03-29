@@ -1,29 +1,82 @@
-import { useState } from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import {useState} from "react";
+import {View, Text, TextInput, Pressable, ScrollView, StyleSheet} from "react-native";
+
+import TripCard from "@/Components/TripCard";
+
+interface Trip {
+    id: string;
+    title: string;
+    destination: string;
+    date: string;
+    rating: number;
+}
 
 export default function HomeScreen() {
-    const [name, setName] = useState('');
+    const [trips, setTrips] = useState<Trip[]>([]);
+    const [title, setTitle] = useState('');
+    const [destination, setDestination] = useState('');
+    const [date, setDate] = useState('');
+    const [rating, setRating] = useState('');
+
+    const handleAddTrip = () => {
+        if(!title.trim() || !destination.trim() ) return;
+        const newTrip: Trip = {
+            id: Date.now().toString(),
+            title: title.trim(),
+            destination: destination.trim(),
+            date: date.trim() || 'Brak daty',
+            rating: Number(rating) || 1,
+        };
+
+        setTrips([...trips, newTrip]);
+        setTitle('');
+        setDestination('');
+        setDate('');
+        setRating('');
+    }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.label}>Jak masz na imię?</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Wpisz swoje imie..."
-                value={name}
-                onChangeText={setName}
-            />
-            <Text style={styles.greeting} >
-                {name ? `Hello, ${name}!` : 'Wpisz swoje imie powyżej!'}
-            </Text>
-        </View>
+      <ScrollView style={styles.container}>
+          <TextInput
+              style={styles.input}
+              placeholder="Tytuł podróży..."
+              value={title}
+              onChangeText={setTitle}
+          />
+          <TextInput
+              style={styles.input}
+              placeholder="Destynacja"
+              value={destination}
+              onChangeText={setDestination}
+          />
+          <TextInput
+              style={styles.input}
+              placeholder="Data (e.g. 2026-07)..."
+              value={date}
+              onChangeText={setDate}
+          />
+          <TextInput
+              style={styles.input}
+              placeholder="Ocena (e.g. 5)"
+              value={rating.toString()}
+              onChangeText={setRating}
+              keyboardType="numeric"
+          />
+
+          <Pressable
+              style={styles.addBtn}
+              onPress={handleAddTrip}
+              >
+            <Text style={styles.addText}>+ Dodaj podróż</Text>
+          </Pressable>
+      </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {flex:1, justifyContent: 'center', padding: 24, backgroundColor: '#f0f4f8'},
-    label: {fontSize: 20, fontWeight: 'bold', marginBottom: 8},
-    input: {borderWidth: 1, borderColor: '#CED4DA', borderRadius: 8, padding: 12, fontSize: 16, backgroundColor: '#FFF'},
-    greeting: {backgroundColor: '#61DAFB', paddingHorizontal: 32, paddingVertical: 12, borderRadius: 8, marginTop: 10},
-    buttonText: {fontSize: 24, marginTop: 16, color: '#61DAFB', fontWeight: 'bold'},
+    container: {flex:1, padding: 50, backgroundColor: '#f0f4f8'},
+    heading: {fontSize: 28, fontWeight: 'bold', marginBottom: 16, marginTop: 48},
+    input: {borderWidth: 1, borderColor: '#CED4DA', borderRadius: 8, padding: 12, fontSize: 16, backgroundColor: '#fff', marginBottom: 8},
+    addBtn: {backgroundColor: '#61DAFB', padding: 14, borderRadius: 8, marginTop: 4, marginBottom: 16, alignItems: 'center'},
+    addText: {fontSize: 16, fontWeight: 'bold', color: '#0A1628'},
 });
