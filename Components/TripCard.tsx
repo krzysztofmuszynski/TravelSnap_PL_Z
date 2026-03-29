@@ -7,10 +7,9 @@ interface TripCardProps {
     date: string;
     rating: number;
     imageURI?: string;
-    onUsun?: () => void;
 }
 
-export default function TripCard({title, destination, date, rating, imageURI, onUsun} : TripCardProps) {
+export default function TripCard({title, destination, date, rating, imageURI} : TripCardProps) {
 
     return (
         <View style={styles.card}>
@@ -31,11 +30,6 @@ export default function TripCard({title, destination, date, rating, imageURI, on
                         <Star key={index} />
                     ))}
                 </Text>
-            </Pressable>
-            <Pressable
-                onPress={onUsun}
-            >
-                <Text style={{color: 'red', marginTop: 8, fontWeight: 'bold'}}>Usuń</Text>
             </Pressable>
         </View>
     )

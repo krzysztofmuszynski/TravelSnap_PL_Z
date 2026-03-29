@@ -35,9 +35,19 @@ export default function HomeScreen() {
         setRating('');
     }
 
-    const handleUsun = (id: string) => {
-        setTrips(trips.filter(trip => trip.id !== id));
-    }
+
+    const handleRatingChange = (value: string) => {
+        if (value === "") {
+            setRating("");
+            return;
+        }
+
+        const parsedValue = parseInt(value, 10);
+
+        if (parsedValue >= 1 && parsedValue <= 5) {
+            setRating(parsedValue.toString());
+        }
+    };
 
     return (
       <ScrollView style={styles.container}>
@@ -62,8 +72,8 @@ export default function HomeScreen() {
           <TextInput
               style={styles.input}
               placeholder="Ocena (e.g. 5)"
-              value={rating.toString()}
-              onChangeText={setRating}
+              value={rating}
+              onChangeText={handleRatingChange}
               keyboardType="numeric"
           />
 
@@ -76,7 +86,7 @@ export default function HomeScreen() {
 
           <View>
               {trips.map(trip => (
-                  <TripCard key={trip.id} title={trip.title} destination={trip.destination} date={trip.date} rating={trip.rating} onUsun={() => handleUsun(trip.id)} />
+                  <TripCard key={trip.id} title={trip.title} destination={trip.destination} date={trip.date} rating={trip.rating} />
               ))}
           </View>
       </ScrollView>
