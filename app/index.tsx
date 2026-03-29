@@ -85,6 +85,7 @@ export default function HomeScreen() {
           </Pressable>
 
           <View>
+              <Text style={styles.tripCounter}>Aktualna liczba podróży: {trips.length}</Text>
               {trips.map(trip => (
                   <TripCard key={trip.id} title={trip.title} destination={trip.destination} date={trip.date} rating={trip.rating} />
               ))}
@@ -99,4 +100,5 @@ const styles = StyleSheet.create({
     input: {borderWidth: 1, borderColor: '#CED4DA', borderRadius: 8, padding: 12, fontSize: 16, backgroundColor: '#fff', marginBottom: 8},
     addBtn: {backgroundColor: '#61DAFB', padding: 14, borderRadius: 8, marginTop: 4, marginBottom: 16, alignItems: 'center'},
     addText: {fontSize: 16, fontWeight: 'bold', color: '#0A1628'},
+    tripCounter: {fontSize: 16, fontWeight: 'bold', color: '#0A1628', marginTop: 16, padding: 16},
 });
