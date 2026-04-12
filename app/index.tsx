@@ -49,6 +49,14 @@ export default function HomeScreen() {
         }
     };
 
+    const isValidYearMonth = (value: string) => {
+        const cleaned = value.replace(/[^0-9-]/g, "");
+
+        if (cleaned.length <= 7) {
+            setDate(cleaned);
+        }
+    };
+
     return (
       <ScrollView style={styles.container}>
           <TextInput
@@ -67,7 +75,7 @@ export default function HomeScreen() {
               style={styles.input}
               placeholder="Data (e.g. 2026-07)..."
               value={date}
-              onChangeText={setDate}
+              onChangeText={isValidYearMonth}
           />
           <TextInput
               style={styles.input}
