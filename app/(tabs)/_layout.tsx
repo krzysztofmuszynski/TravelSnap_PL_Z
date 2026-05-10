@@ -6,33 +6,17 @@ import {Colors} from "@/Components/Colors";
 
 export default function RootLayout() {
     return (
-        <Tabs screenOptions={{
-            tabBarActiveTintColor: Colors.dark.tint,
-            tabBarInactiveTintColor: Colors.dark.inactiveTint,
-            tabBarStyle: {
+        <Stack screenOptions={{
+            headerStyle: {
                 backgroundColor: Colors.dark.background,
-                borderTopWidth: 0,
             },
-            headerShown: false,
+            headerTintColor: Colors.dark.tint,
+            contentStyle: {
+                backgroundColor: Colors.dark.background,
+            }
         }}>
-            <Tabs.Screen name="index" options={{
-                title: "Home",
-                tabBarIcon: ({color, size}) => (
-                    <Ionicons name="home" size={size} color={color} />
-                ),
-            }} />
-            <Tabs.Screen name="index" options={{
-                title: "Explore",
-                tabBarIcon: ({color, size}) => (
-                    <Ionicons name="compass-outline" size={size} color={color} />
-                ),
-            }} />
-            <Tabs.Screen name="index" options={{
-                title: "Profile",
-                tabBarIcon: ({color, size}) => (
-                    <Ionicons name="person" size={size} color={color} />
-                ),
-            }} />
-        </Tabs>
+            <Stack.Screen name="(tabs)" options={{headerShown: false}} />
+            <Stack.Screen name="trip/[id]" options={{title: 'Trip Details'}} />
+        </Stack>
     );
 }
