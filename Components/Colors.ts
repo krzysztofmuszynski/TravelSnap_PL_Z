@@ -8,4 +8,9 @@ export const Colors = {
     inputBg:       '#243352',  // tło inputów w formularzu
     inputBorder:   '#2E4066',  // obramowanie inputów
     border:        '#2E3A50',  // subtelne linie oddzielające
+    dark: {
+        tint: '#61DAFB',
+        inactiveTint: '#8B95A5',
+        background: '#0A1628',
+    }
 } as const;
