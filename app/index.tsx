@@ -2,6 +2,12 @@ import {useState} from "react";
 import {View, Text, TextInput, Pressable, ScrollView, StyleSheet} from "react-native";
 
 import TripCard from "@/Components/TripCard";
+import ScreenHeader from "@/Components/ScreenHeader";
+import {Colors} from "@/Components/Colors";
+import EmptyState from "@/Components/EmptyState";
+import TripStats from "@/Components/TripStats";
+import {SafeAreaView} from "react-native-safe-area-context";
+import {StatusBar} from "expo-status-bar";
 
 interface Trip {
     id: string;
@@ -9,6 +15,7 @@ interface Trip {
     destination: string;
     date: string;
     rating: number;
+    onDelete?: () => void;
 }
 
 export default function HomeScreen() {
@@ -57,56 +64,76 @@ export default function HomeScreen() {
         }
     };
 
+    const handleDeleteTrip = (id: string) => {
+        setTrips(trips.filter(trip => trip.id !== id));
+    }
+
     return (
-      <ScrollView style={styles.container}>
-          <TextInput
-              style={styles.input}
-              placeholder="Tytuł podróży..."
-              value={title}
-              onChangeText={setTitle}
-          />
-          <TextInput
-              style={styles.input}
-              placeholder="Destynacja"
-              value={destination}
-              onChangeText={setDestination}
-          />
-          <TextInput
-              style={styles.input}
-              placeholder="Data (e.g. 2026-07)..."
-              value={date}
-              onChangeText={isValidYearMonth}
-          />
-          <TextInput
-              style={styles.input}
-              placeholder="Ocena (e.g. 5)"
-              value={rating}
-              onChangeText={handleRatingChange}
-              keyboardType="numeric"
-          />
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
+          <StatusBar style="light"/>
+          <ScrollView style={styles.container}>
+              <ScreenHeader tripCount={trips.length} />
+              <TripStats trips={trips} />
+              <TextInput
+                  style={styles.input}
+                  placeholderTextColor={Colors.textSecondary}
+                  placeholder="Tytuł podróży..."
+                  value={title}
+                  onChangeText={setTitle}
+              />
+              <TextInput
+                  style={styles.input}
+                  placeholder="Destynacja"
+                  placeholderTextColor={Colors.textSecondary}
+                  value={destination}
+                  onChangeText={setDestination}
+              />
+              <TextInput
+                  style={styles.input}
+                  placeholder="Data (e.g. 2026-07)..."
+                  placeholderTextColor={Colors.textSecondary}
+                  value={date}
+                  onChangeText={isValidYearMonth}
+              />
+              <TextInput
+                  style={styles.input}
+                  placeholder="Ocena (e.g. 5)"
+                  placeholderTextColor={Colors.textSecondary}
+                  value={rating}
+                  onChangeText={handleRatingChange}
+                  keyboardType="numeric"
+              />
 
-          <Pressable
-              style={styles.addBtn}
-              onPress={handleAddTrip}
+              <Pressable
+                  style={styles.addBtn}
+                  onPress={handleAddTrip}
               >
-            <Text style={styles.addText}>+ Dodaj podróż</Text>
-          </Pressable>
+                  <Text style={styles.addText}>+ Dodaj podróż</Text>
+              </Pressable>
 
-          <View>
-              <Text style={styles.tripCounter}>Aktualna liczba podróży: {trips.length}</Text>
-              {trips.map(trip => (
-                  <TripCard key={trip.id} title={trip.title} destination={trip.destination} date={trip.date} rating={trip.rating} />
-              ))}
-          </View>
-      </ScrollView>
+              <View>
+                  <Text style={styles.tripCounter}>Aktualna liczba podróży: {trips.length}</Text>
+                  {trips.length === 0 ? <EmptyState /> : trips.map(trip => (
+                      <TripCard
+                          key={trip.id}
+                          title={trip.title}
+                          destination={trip.destination}
+                          date={trip.date}
+                          rating={trip.rating}
+                          onDelete={() => handleDeleteTrip(trip.id)}
+                      />
+                  ))}
+              </View>
+          </ScrollView>
+      </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {flex:1, padding: 50, backgroundColor: '#f0f4f8'},
+    container: {flex:1, padding: 50, backgroundColor: Colors.background},
     heading: {fontSize: 28, fontWeight: 'bold', marginBottom: 16, marginTop: 48},
-    input: {borderWidth: 1, borderColor: '#CED4DA', borderRadius: 8, padding: 12, fontSize: 16, backgroundColor: '#fff', marginBottom: 8},
-    addBtn: {backgroundColor: '#61DAFB', padding: 14, borderRadius: 8, marginTop: 4, marginBottom: 16, alignItems: 'center'},
-    addText: {fontSize: 16, fontWeight: 'bold', color: '#0A1628'},
+    input: {borderWidth: 1, borderColor: Colors.inputBorder, borderRadius: 12, padding: 12, fontSize: 16, backgroundColor: Colors.background, marginBottom: 8, color: '#fff'},
+    addBtn: {backgroundColor: Colors.accent, padding: 14, borderRadius: 12, marginTop: 4, marginBottom: 16, alignItems: 'center'},
+    addText: {fontSize: 16, fontWeight: 'bold', color: '#fff'},
     tripCounter: {fontSize: 16, fontWeight: 'bold', color: '#0A1628', marginTop: 16, padding: 16},
 });

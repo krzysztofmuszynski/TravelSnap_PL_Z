@@ -1,11 +1,7 @@
-import {Image} from 'expo-image';
+import {Ionicons} from '@expo/vector-icons';
+import {Colors} from "@/Components/Colors";
 export default function Star({index}: any){
     return(
-        <Image
-            key={index}
-            source={require('../assets/images/star.svg')}
-            style={{width: 20, height: 20}}
-            contentFit="contain"
-        />
+        <Ionicons name="star" size={16} color={Colors.accent} />
     )
 }

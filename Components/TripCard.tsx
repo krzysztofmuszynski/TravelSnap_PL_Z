@@ -1,4 +1,6 @@
-import {View, Text, StyleSheet, Image, Pressable, Alert} from 'react-native';
+import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {Ionicons, AntDesign} from '@expo/vector-icons';
+import {Colors} from "@/Components/Colors";
 import Star from "@/Components/Star";
 
 interface TripCardProps {
@@ -7,64 +9,63 @@ interface TripCardProps {
     date: string;
     rating: number;
     imageURI?: string;
+    onDelete: () => void;
 }
 
-export default function TripCard({title, destination, date, rating, imageURI} : TripCardProps) {
+export default function TripCard({title, destination, date, rating, imageURI, onDelete} : TripCardProps) {
 
     return (
         <View style={styles.card}>
-            <Pressable onPress={() => {Alert.alert("Wykup wycieczke")}}>
-                <Text style={styles.title}>{title}</Text>
-                <Text style={styles.destination}>{destination}</Text>
-                <Text style={styles.date}>{date}</Text>
-                {imageURI && (
-                    <Image
-                        style={{width: 100, height: 100, borderRadius: 5, marginTop: 8}}
-                        source={{
-                            uri: imageURI
-                        }}
-                    />
-                )}
-                <Text style={styles.rating}>
-                    {Array.from({length: rating}).map((el, index) => (
-                        <Star key={index} />
-                    ))}
-                </Text>
-            </Pressable>
+           <View style={styles.header}>
+               <Ionicons name="location" size={20} color="#E94560" />
+               <View>
+                   <Text style={styles.title}>{title}</Text>
+                   <Text style={styles.destination}>{destination}</Text>
+               </View>
+           </View>
+           <View>
+               <View style={styles.dateRow}>
+                   <Ionicons name="calendar" size={14} color="#61DAFB" />
+                   <Text style={styles.dateText}>
+                       {date}
+                   </Text>
+               </View>
+               <View style={styles.stars}>
+                   {Array.from({length: rating}).map((_, index) => (
+                       <Star key={index}/>
+                   ))}
+               </View>
+               <Pressable onPress={onDelete}>
+                   <Text style={styles.deleteBtn}>Delete</Text>
+               </Pressable>
+           </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#fff',
-        borderRadius: 12,
+        backgroundColor: Colors.card,
+        borderRadius: 16,
         padding: 16,
-        marginHorizontal: 16,
-        marginVertical: 8,
+        marginBottom: 12,
+        //Cień iOS
         shadowColor: '#000',
-        shadowOpacity: 0.1,
+        shadowOffset: {width: 0, height: 4},
+        shadowOpacity: 0.2,
         shadowRadius: 8,
-        shadowOffset: {width: 0, height: 2},
-        elevation: 3,
+        //Cień Android
+        elevation: 4,
     },
-    title: {
-        fontSize: 18,
-        fontWeight: 'bold',
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 12,
     },
-    destination: {
-        fontSize: 14,
-        color: '#61DAFB',
-        marginTop: 4,
-    },
-    date: {
-        fontSize: 12,
-        color: '#8B95A5',
-        marginTop: 4,
-    },
-    rating: {
-        fontSize: 16,
-        color: '#FFB86C',
-        marginTop: 8,
-    }
+    title: {fontSize: 18, fontWeight: 'bold', color: Colors.textPrimary},
+    destination: {fontSize: 13, color: Colors.textPrimary, marginTop: 2},
+    dateRow: {flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
+    dateText: {fontSize: 12, color: Colors.primary, marginLeft: 6},
+    stars: {flexDirection: 'row', gap: 2},
+    deleteBtn: {alignSelf: 'flex-end', backgroundColor: Colors.accent, padding: 6, borderRadius: 12},
 });
