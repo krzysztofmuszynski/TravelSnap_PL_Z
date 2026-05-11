@@ -1,7 +1,8 @@
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Pressable, PressableProps} from 'react-native';
 import {Ionicons, AntDesign} from '@expo/vector-icons';
 import {Colors} from "@/Components/Colors";
 import Star from "@/Components/Star";
+import RatingStars from "@/Components/RatingStars";
 
 interface TripCardProps {
     title: string;
@@ -12,33 +13,33 @@ interface TripCardProps {
     onDelete: () => void;
 }
 
-export default function TripCard({title, destination, date, rating, imageURI, onDelete} : TripCardProps) {
+export default function TripCard({title, destination, date, rating, imageURI, onDelete, ...pressableProps} : TripCardProps) {
 
     return (
         <View style={styles.card}>
-           <View style={styles.header}>
-               <Ionicons name="location" size={20} color="#E94560" />
-               <View>
-                   <Text style={styles.title}>{title}</Text>
-                   <Text style={styles.destination}>{destination}</Text>
-               </View>
-           </View>
-           <View>
-               <View style={styles.dateRow}>
-                   <Ionicons name="calendar" size={14} color="#61DAFB" />
-                   <Text style={styles.dateText}>
-                       {date}
-                   </Text>
-               </View>
-               <View style={styles.stars}>
-                   {Array.from({length: rating}).map((_, index) => (
-                       <Star key={index}/>
-                   ))}
-               </View>
-               <Pressable onPress={onDelete}>
-                   <Text style={styles.deleteBtn}>Delete</Text>
-               </Pressable>
-           </View>
+            <Pressable {...pressableProps}>
+                <View style={styles.header}>
+                    <Ionicons name="location" size={20} color="#E94560" />
+                    <View>
+                        <Text style={styles.title}>{title}</Text>
+                        <Text style={styles.destination}>{destination}</Text>
+                    </View>
+                </View>
+                <View>
+                    <View style={styles.dateRow}>
+                        <Ionicons name="calendar" size={14} color="#61DAFB" />
+                        <Text style={styles.dateText}>
+                            {date}
+                        </Text>
+                    </View>
+                    <View style={styles.stars}>
+                        <RatingStars rating={rating} />
+                    </View>
+                    <Pressable onPress={onDelete}>
+                        <Text style={styles.deleteBtn}>Delete</Text>
+                    </Pressable>
+                </View>
+            </Pressable>
         </View>
     )
 }

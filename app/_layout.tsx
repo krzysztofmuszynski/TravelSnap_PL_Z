@@ -1,12 +1,18 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
+import {Colors} from "@/Components/Colors";
 
 export default function RootLayout() {
   return (
     <>
-      <Stack screenOptions={{ headerShown: false }} />
-      <StatusBar style="auto" />
+      <Stack screenOptions={{
+          headerStyle: { backgroundColor: Colors.dark.background },
+          headerTitleStyle: { color: Colors.textPrimary },
+      }}>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="trip/[id]" options={{ title: "Trip Details" }} />
+      </Stack>
     </>
   );
 }
