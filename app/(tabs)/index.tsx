@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {View, Text, TextInput, Pressable, ScrollView, StyleSheet} from "react-native";
 
 import TripCard from "@/Components/TripCard";
@@ -8,7 +8,7 @@ import EmptyState from "@/Components/EmptyState";
 import TripStats from "@/Components/TripStats";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {StatusBar} from "expo-status-bar";
-import {Link} from "expo-router";
+import {Link, useLocalSearchParams, useRouter} from "expo-router";
 
 interface Trip {
     id: string;
@@ -20,50 +20,55 @@ interface Trip {
 }
 
 export default function HomeScreen() {
+    const router = useRouter();
+
+    const params = useLocalSearchParams<{
+        newTripId?: string;
+        newTripTitle?: string;
+        newTripDestination?: string;
+        newTripDate?: string;
+        newTripRating?: string;
+    }>();
+
     const [trips, setTrips] = useState<Trip[]>([]);
     const [title, setTitle] = useState('');
     const [destination, setDestination] = useState('');
     const [date, setDate] = useState('');
     const [rating, setRating] = useState('');
 
-    const handleAddTrip = () => {
-        if(!title.trim() || !destination.trim() ) return;
+    useEffect(() => {
+        if(
+            !params.newTripId ||
+            !params.newTripTitle ||
+            !params.newTripDestination ||
+            !params.newTripDate ||
+            !params.newTripRating
+        ) return;
+
         const newTrip: Trip = {
-            id: Date.now().toString(),
-            title: title.trim(),
-            destination: destination.trim(),
-            date: date.trim() || 'Brak daty',
-            rating: Number(rating) || 1,
+            id: params.newTripId,
+            title: params.newTripTitle,
+            destination: params.newTripDestination,
+            date: params.newTripDate || 'Brak daty',
+            rating: Number(params.newTripRating) || 1,
         };
 
-        setTrips([...trips, newTrip]);
-        setTitle('');
-        setDestination('');
-        setDate('');
-        setRating('');
-    }
+        setTrips((currentTrips) => {
+            const tripAlreadyExists = currentTrips.some(
+                (trip) => trip.id === newTrip.id
+            );
 
+            if(tripAlreadyExists) return currentTrips;
 
-    const handleRatingChange = (value: string) => {
-        if (value === "") {
-            setRating("");
-            return;
-        }
-
-        const parsedValue = parseInt(value, 10);
-
-        if (parsedValue >= 1 && parsedValue <= 5) {
-            setRating(parsedValue.toString());
-        }
-    };
-
-    const isValidYearMonth = (value: string) => {
-        const cleaned = value.replace(/[^0-9-]/g, "");
-
-        if (cleaned.length <= 7) {
-            setDate(cleaned);
-        }
-    };
+            return [...currentTrips, newTrip];
+        });
+    }, [
+        params.newTripId,
+        params.newTripTitle,
+        params.newTripDestination,
+        params.newTripDate,
+        params.newTripRating,
+    ]);
 
     const handleDeleteTrip = (id: string) => {
         setTrips(trips.filter(trip => trip.id !== id));
@@ -74,44 +79,13 @@ export default function HomeScreen() {
           <StatusBar style="light"/>
           <ScrollView style={styles.container}>
               <ScreenHeader tripCount={trips.length} />
-              <TripStats trips={trips} />
-              <TextInput
-                  style={styles.input}
-                  placeholderTextColor={Colors.textSecondary}
-                  placeholder="Tytuł podróży..."
-                  value={title}
-                  onChangeText={setTitle}
-              />
-              <TextInput
-                  style={styles.input}
-                  placeholder="Destynacja"
-                  placeholderTextColor={Colors.textSecondary}
-                  value={destination}
-                  onChangeText={setDestination}
-              />
-              <TextInput
-                  style={styles.input}
-                  placeholder="Data (e.g. 2026-07)..."
-                  placeholderTextColor={Colors.textSecondary}
-                  value={date}
-                  onChangeText={isValidYearMonth}
-              />
-              <TextInput
-                  style={styles.input}
-                  placeholder="Ocena (e.g. 5)"
-                  placeholderTextColor={Colors.textSecondary}
-                  value={rating}
-                  onChangeText={handleRatingChange}
-                  keyboardType="numeric"
-              />
-
               <Pressable
-                  style={styles.addBtn}
-                  onPress={handleAddTrip}
+                  style={styles.fab}
+                  onPress={() => router.push("/addTrip")}
               >
-                  <Text style={styles.addText}>+ Dodaj podróż</Text>
+                  <Text style={styles.fabText}>+</Text>
               </Pressable>
-
+              <TripStats trips={trips} />
               <View>
                   <Text style={styles.tripCounter}>Aktualna liczba podróży: {trips.length}</Text>
                   {trips.length === 0 ? <EmptyState /> : trips.map(trip => (
@@ -152,4 +126,6 @@ const styles = StyleSheet.create({
     addBtn: {backgroundColor: Colors.accent, padding: 14, borderRadius: 12, marginTop: 4, marginBottom: 16, alignItems: 'center'},
     addText: {fontSize: 16, fontWeight: 'bold', color: '#fff'},
     tripCounter: {fontSize: 16, fontWeight: 'bold', color: '#0A1628', marginTop: 16, padding: 16},
+    fab: { position: "absolute", top: -40, right: 20, width: 30, height: 30, borderRadius: 30, backgroundColor: Colors.accent, alignItems: "center", justifyContent: "center", elevation: 6, shadowColor: "#000", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 6},
+    fabText: { color: "#fff", fontSize: 20, fontWeight: "bold", lineHeight: 21},
 });

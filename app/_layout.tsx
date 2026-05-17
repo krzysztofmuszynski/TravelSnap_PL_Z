@@ -10,6 +10,7 @@ export default function RootLayout() {
           headerStyle: { backgroundColor: Colors.dark.background },
           headerTitleStyle: { color: Colors.textPrimary },
       }}>
+          <Stack.Screen name="addTrip" options={{ title: "Add Trip", presentation: "modal" }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="trip/[id]" options={{ title: "Trip Details" }} />
       </Stack>

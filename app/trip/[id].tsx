@@ -51,7 +51,7 @@ export default function Trip() {
 
             </View>
             <Pressable onPress={() => router.back()}>
-                <Text style={styles.button}>Back to Trip List</Text>
+                <Text style={styles.button}>Powrót do listy</Text>
             </Pressable>
         </View>
     )
@@ -59,7 +59,7 @@ export default function Trip() {
 
 const styles = StyleSheet.create({
     container: {flex: 1, backgroundColor: Colors.background, padding: 16},
-    button: {backgroundColor: Colors.accent, padding: 12, borderRadius: 12, marginTop: 16},
+    button: {backgroundColor: Colors.dark.tint, padding: 12, borderRadius: 12, marginTop: 16, textAlign: 'center'},
     title: {fontSize: 24, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 16},
     row: {flexDirection: 'row', alignItems: 'center', marginBottom: 8},
     metaText: {fontSize: 14, color: Colors.textSecondary, marginLeft: 8},
